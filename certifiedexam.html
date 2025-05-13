@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pythovate - Extreme Python Exam</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; background-color: #f7f7f7; }
+    h1 { color: #222; }
+    .question { margin-bottom: 20px; }
+    .question h3 { margin: 10px 0; }
+    #result { font-weight: bold; font-size: 20px; margin-top: 30px; }
+    button { padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+
+  <h1>Pythovate - Extreme Python Exam</h1>
+
+  <form id="quizForm" action="https://formsubmit.co/pythovate@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="New Exam Submission from Pythovate!">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+  </form>
+
+  <button onclick="submitQuiz()">Submit</button>
+  <div id="result"></div>
+
+  <script>
+    const questions = [
+      { q: "What is the output of: print(0.1 + 0.2 == 0.3)", options: ["True", "False", "None", "Error"], answer: "False" },
+      { q: "Which sorting algorithm is used in Python's built-in sort()?", options: ["Merge Sort", "Quick Sort", "Timsort", "Bubble Sort"], answer: "Timsort" },
+      { q: "What is the output of: print(''.join(sorted('abc', reverse=True)))", options: ["cba", "abc", "bac", "acb"], answer: "cba" },
+      { q: "What does GIL stand for in Python?", options: ["Global Interpreter Lock", "Global Internal Logic", "Graph Integration Layer", "Generic Input Logic"], answer: "Global Interpreter Lock" },
+      { q: "Which of these is immutable?", options: ["list", "set", "dict", "tuple"], answer: "tuple" },
+      { q: "What does the 'with' statement do?", options: ["Manages context", "Creates loops", "Defines class", "Runs async"], answer: "Manages context" },
+      { q: "What is the result of: bool('False')?", options: ["False", "True", "None", "Error"], answer: "True" },
+      { q: "Which module allows spawning parallel processes?", options: ["threading", "multiprocessing", "concurrent", "os"], answer: "multiprocessing" },
+      { q: "What is a lambda function?", options: ["Named function", "Anonymous function", "Recursive function", "Method"], answer: "Anonymous function" },
+      { q: "How to declare an abstract method?", options: ["@abstract", "@abstractmethod", "@classmethod", "@abstractfunc"], answer: "@abstractmethod" },
+      // Questions 11–47 (continue adding your severe hard questions)
+      { q: "What does the 'nonlocal' keyword do?", options: ["Modifies global", "Modifies outer scope", "Declares constant", "Creates variable"], answer: "Modifies outer scope" },
+      { q: "Which exception is raised for 0 division?", options: ["ZeroError", "MathError", "ZeroDivisionError", "DivisionByZero"], answer: "ZeroDivisionError" },
+      { q: "What is the time complexity of set lookup?", options: ["O(1)", "O(n)", "O(log n)", "O(n log n)"], answer: "O(1)" },
+      { q: "Which data structure uses LIFO?", options: ["Queue", "List", "Set", "Stack"], answer: "Stack" },
+      { q: "Which decorator makes a method static?", options: ["@static", "@staticmethod", "@classmethod", "@decorator"], answer: "@staticmethod" },
+      { q: "What is a metaclass in Python?", options: ["Class of a class", "Template", "Class method", "Module"], answer: "Class of a class" },
+      { q: "Which library is used for numerical computations?", options: ["math", "numpy", "matplotlib", "sys"], answer: "numpy" },
+      { q: "Which function evaluates a string as code?", options: ["compile()", "exec()", "eval()", "parse()"], answer: "eval()" },
+      { q: "How to create a virtual environment?", options: ["python -m env", "python venv", "python -m venv env", "py -env"], answer: "python -m venv env" },
+      { q: "What’s the output: len({True: 'a', 1: 'b', 1.0: 'c'})", options: ["3", "2", "1", "Error"], answer: "1" },
+      { q: "Which is faster: list comprehension or for loop?", options: ["Same", "List comprehension", "For loop", "Depends"], answer: "List comprehension" },
+      { q: "What’s the purpose of '__slots__'?", options: ["Save memory", "Add slots", "Inheritance", "Polymorphism"], answer: "Save memory" },
+      { q: "Which module is used for regex?", options: ["regexp", "pattern", "re", "regex"], answer: "re" },
+      { q: "What is the result of bool([])?", options: ["False", "True", "None", "Error"], answer: "False" },
+      { q: "How to handle exceptions?", options: ["try/catch", "try/except", "handle/except", "catch"], answer: "try/except" },
+      { q: "What is duck typing?", options: ["Inheritance", "Type matching", "Behavior-based typing", "Casting"], answer: "Behavior-based typing" },
+      { q: "What’s the output: list('abc')", options: ["['abc']", "['a','b','c']", "abc", "Error"], answer: "['a','b','c']" },
+      { q: "Which one is not a valid Python type?", options: ["set", "frozenset", "hashmap", "dict"], answer: "hashmap" },
+      { q: "What is the result of: all([True, 1, 'a'])", options: ["True", "False", "Error", "None"], answer: "True" },
+      { q: "Which keyword is used to define a generator?", options: ["def", "yield", "gen", "return"], answer: "yield" },
+      { q: "What is the output: print(type(lambda x: x))", options: ["<class 'function'>", "<class 'lambda'>", "function", "lambda"], answer: "<class 'function'>" },
+      { q: "Which Python version introduced async/await?", options: ["2.7", "3.3", "3.5", "3.7"], answer: "3.5" },
+      { q: "What’s the result: isinstance(True, int)", options: ["True", "False", "Error", "None"], answer: "True" },
+      { q: "Which object represents nothing?", options: ["None", "null", "void", "blank"], answer: "None" },
+      { q: "What does pip stand for?", options: ["Package Installer for Python", "Python Install Package", "Python Internal Process", "None"], answer: "Package Installer for Python" },
+      { q: "How to open file in append mode?", options: ["'w'", "'a'", "'r'", "'x'"], answer: "'a'" },
+      { q: "Which function returns an iterator?", options: ["iter()", "next()", "range()", "map()"], answer: "iter()" },
+      { q: "What’s the output of: sum([i for i in range(3)])", options: ["6", "3", "0", "None"], answer: "3" },
+      { q: "Which keyword exits a loop?", options: ["continue", "pass", "exit", "break"], answer: "break" },
+      { q: "What is the output of bool(0)?", options: ["True", "False", "None", "Error"], answer: "False" },
+      { q: "What is returned by input()?", options: ["int", "string", "bool", "None"], answer: "string" },
+      { q: "What’s the use of __name__ == '__main__'?", options: ["Script control", "Module import", "Function name", "Main class"], answer: "Script control" },
+      { q: "Which function converts string to int?", options: ["str()", "int()", "eval()", "chr()"], answer: "int()" },
+      { q: "How to comment a single line?", options: ["//", "#", "--", "/* */"], answer: "#" },
+      { q: "How to install external package?", options: ["pip install pkg", "python install", "setup.py install", "get pkg"], answer: "pip install pkg" },
+      { q: "Which method adds item to list?", options: ["add()", "insert()", "append()", "push()"], answer: "append()" }
+    ];
+
+    const form = document.getElementById("quizForm");
+
+    questions.forEach((q, index) => {
+      const div = document.createElement("div");
+      div.className = "question";
+
+      const title = document.createElement("h3");
+      title.innerText = `Q${index + 1}: ${q.q}`;
+      div.appendChild(title);
+
+      q.options.forEach(opt => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="radio" name="q${index}" value="${opt}"> ${opt}`;
+        div.appendChild(label);
+        div.appendChild(document.createElement("br"));
+      });
+
+      form.appendChild(div);
+    });
+
+    function submitQuiz() {
+      let score = 0;
+      questions.forEach((q, index) => {
+        const options = document.getElementsByName(`q${index}`);
+        for (let opt of options) {
+          if (opt.checked && opt.value === q.answer) {
+            score++;
+            break;
+          }
+        }
+      });
+
+      const scoreInput = document.createElement("input");
+      scoreInput.type = "hidden";
+      scoreInput.name = "Score";
+      scoreInput.value = `${score} / ${questions.length}`;
+      form.appendChild(scoreInput);
+
+      document.getElementById("result").innerText = `You scored ${score} out of ${questions.length}`;
+      form.submit();
+    }
+  </script>
+
+</body>
+</html>
